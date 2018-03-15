@@ -1,0 +1,2 @@
+bindings/clock_stubs.o
+bindings/mm_stubs.o

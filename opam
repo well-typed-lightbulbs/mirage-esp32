@@ -1,0 +1,17 @@
+opam-version: "1.2"
+maintainer:   "lucas.pluvinage@ens.fr"
+license:      "ISC"
+authors: []
+tags: []
+build: [ "ocaml" "pkg/pkg.ml" "build" "--pinned" "%{pinned}%" "--toolchain" "esp32"]
+depends: [
+  "ocamlfind" {build}
+  "ocamlbuild" {build}
+  "topkg" {build & >= "0.7.6"}
+  "ocb-stubblr" {build}
+  "lwt-esp32" {>= "2.4.3"}
+  "psq-esp32" 
+]
+install: [["opam-installer" "--prefix=%{prefix}%/ocaml-esp32" "mirage-esp32.install"]]
+conflicts: [ "io-page" {< "2.0.0"} ]
+available: [ ocaml-version >= "4.04.2" ]

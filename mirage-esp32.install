@@ -1,0 +1,15 @@
+# mirage-esp32
+
+doc: [
+  "_build/CHANGES.md" {"CHANGES.md"}
+  "_build/LICENSE.md" {"LICENSE.md"}
+  "_build/README.md" {"README.md"} ]
+lib: [
+  "_build/lib/oS.cma" {"oS.cma"}
+  "_build/lib/oS.cmi" {"oS.cmi"}
+  "?_build/lib/oS.cmti" {"oS.cmti"}
+  "_build/lib/oS.mli" {"oS.mli"}
+  "_build/opam" {"opam"}
+  "_build/pkg/META" {"META"} ]
+share_root: [
+  "_build/lib/bindings/mirage-esp32.pc" {"pkgconfig/mirage-esp32.pc"} ]

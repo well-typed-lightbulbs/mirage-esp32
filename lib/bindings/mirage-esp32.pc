@@ -1,0 +1,10 @@
+prefix=${pcfiledir}/../..
+exec_prefix=${prefix}
+libdir=${exec_prefix}/lib
+
+Name: mirage-esp32
+Version: 0.1.1
+URL: https://github.com/TheLortex/mirage-esp32
+Description: Core platform libraries for Mirage on esp32
+Libs: ${libdir}/mirage-esp32/libmirage-esp32_bindings.a
+Requires: ocaml-esp32

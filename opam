@@ -12,6 +12,6 @@ depends: [
   "lwt-esp32" {>= "2.4.3"}
   "psq-esp32" 
 ]
-install: [["opam-installer" "--prefix=%{prefix}%/ocaml-esp32" "mirage-esp32.install"]]
+install: [["opam-installer" "--prefix=%{prefix}%/esp32-sysroot" "mirage-esp32.install"]]
 conflicts: [ "io-page" {< "2.0.0"} ]
 available: [ ocaml-version >= "4.04.2" ]

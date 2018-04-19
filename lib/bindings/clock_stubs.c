@@ -1,6 +1,7 @@
 #include <esp_timer.h>
 #include <caml/mlvalues.h>
 #include <caml/alloc.h>
+#include <caml/memory.>
 
 // Returns time since boot in microseconds.
 CAMLprim value

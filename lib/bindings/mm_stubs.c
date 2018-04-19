@@ -4,6 +4,7 @@
 #include <stdlib.h>
 
 #include <caml/mlvalues.h>
+#include <caml/memory.>
 
 CAMLprim value
 stub_heap_get_pages_total(__attribute__((unused)) value unit) // noalloc

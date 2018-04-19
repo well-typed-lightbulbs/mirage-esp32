@@ -1,4 +1,4 @@
-#include <esp32/include/esp_timer.h>
+#include <esp_timer.h>
 #include <caml/mlvalues.h>
 
 // Returns time since boot in microseconds.

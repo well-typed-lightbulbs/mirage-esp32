@@ -1,4 +1,4 @@
-#include <heap/include/esp_heap_caps.h>
+#include <esp_heap_caps.h>
 
 #include <stdio.h>
 #include <stdlib.h>

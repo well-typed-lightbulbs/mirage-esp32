@@ -39,6 +39,8 @@ let err exn =
 
 (* Execute one iteration and register a callback function *)
 let run t =
+  Printf.printf "Starting event loop.\n";
+  flush stdout;
   let t = call_hooks enter_hooks <&> t in
   let rec aux () =
     Lwt.wakeup_paused ();
@@ -63,7 +65,9 @@ let run t =
         end else begin
           aux ()
         end in
-  aux ()
+  aux ();
+  Printf.printf "Leaving event loop.\n";
+  flush stdout
 
 let () = at_exit (fun () -> run (call_hooks exit_hooks))
 let at_exit f = ignore (Lwt_sequence.add_l f exit_hooks)

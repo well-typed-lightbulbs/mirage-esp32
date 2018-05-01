@@ -12,6 +12,7 @@ CAMLprim value
 caml_get_monotonic_time(value v_unit)
 {
     CAMLparam1(v_unit);
+    printf("caml_get_monotonic_time called\n");
     CAMLreturn(caml_copy_int64(esp_timer_get_time()));
 }
 

@@ -1,1 +1,1 @@
-let argv () = Lwt.return [||]
+let argv () = Lwt.return [| "mirage" |]

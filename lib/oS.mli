@@ -9,6 +9,12 @@ val argv: unit -> (string array) Lwt.t
 
 end
 
+module Esp32 : sig 
+
+type esp32_result
+
+end
+
 module Lifecycle : sig
 
 val await_shutdown_request :

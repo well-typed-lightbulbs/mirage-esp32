@@ -1,3 +1,4 @@
 bindings/clock_stubs.o
 bindings/mm_stubs.o
 bindings/caml_poll.o
+bindings/net_stubs.o

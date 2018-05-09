@@ -10,7 +10,8 @@ depends: [
   "topkg" {build & >= "0.7.6"}
   "ocb-stubblr" {build}
   "lwt-esp32" {>= "2.4.3"}
-  "psq-esp32" 
+  "psq-esp32"
+  "esp32-idf-headers"
 ]
 install: [["opam-installer" "--prefix=%{prefix}%/esp32-sysroot" "mirage-esp32.install"]]
 conflicts: [ "io-page" {< "2.0.0"} ]

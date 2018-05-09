@@ -9,9 +9,13 @@ val argv: unit -> (string array) Lwt.t
 
 end
 
-module Esp32 : sig 
+module Esp32 : sig
 
-type esp32_result
+type esp32_result =
+  | ESP32_OK
+  | ESP32_AGAIN
+  | ESP32_EINVAL
+  | ESP32_EUNSPEC
 
 end
 

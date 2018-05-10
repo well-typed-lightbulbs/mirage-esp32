@@ -36,6 +36,7 @@ typedef struct frame_list {
 /* Event group to notify Mirage task when data is received*/
 EventGroupHandle_t wifi_event_group;
 const int ESP_FRAME_RECEIVED_BIT = BIT0;
+const int ESP_WIFI_CONNECTED_BIT = BIT1;
 
 
 static frame_list_t* frames_start = NULL;
@@ -79,9 +80,11 @@ esp_err_t event_handler(void *ctx, system_event_t *event)
             break;
         case SYSTEM_EVENT_STA_CONNECTED:
             ESP_ERROR_CHECK(esp_wifi_internal_reg_rxcb(WIFI_IF_STA, packet_handler));
+            xEventGroupSetBits(wifi_event_group, ESP_WIFI_CONNECTED_BIT);
             break;
         case SYSTEM_EVENT_STA_DISCONNECTED:
             ESP_ERROR_CHECK(esp_wifi_connect());
+            xEventGroupClearBits(wifi_event_group, ESP_WIFI_CONNECTED_BIT);
             break;
         default:
             break;
@@ -187,6 +190,9 @@ mirage_esp32_net_write(value v_buf, value v_size)
     void *buf = Caml_ba_data_val(v_buf);
     size_t size = Long_val(v_size);
     esp32_result_t result;
+
+    xEventGroupWaitBits(wifi_event_group, ESP_WIFI_CONNECTED_BIT, false, true, 300*configTICK_RATE_HZ);
+
     switch(esp_wifi_internal_tx(WIFI_IF_STA, buf, size)){
         case ERR_OK:
             result = ESP32_OK;

@@ -118,6 +118,7 @@ mirage_esp32_net_info(value v_unit)
     
     v_mac_address = caml_alloc_string(6);
     ESP_ERROR_CHECK(esp_wifi_get_mac(WIFI_IF_STA, (uint8_t*)String_val(v_mac_address)));
+
     v_result = caml_alloc(2, 0);
     Store_field(v_result, 0, v_mac_address);
     Store_field(v_result, 1, Val_long(1400));

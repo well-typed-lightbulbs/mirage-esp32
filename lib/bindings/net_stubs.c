@@ -42,6 +42,29 @@ const int ESP_WIFI_CONNECTED_BIT = BIT1;
 static frame_list_t* frames_start = NULL;
 static frame_list_t* frames_end = NULL;
 
+static uint32_t n_frames = 0;
+
+void free_oldest_frame() 
+{
+    frame_list_t* oldest_frame = frames_start;
+
+    /* Last frame in the list */
+    if (frames_start == frames_end) {
+        frames_start = NULL;
+        frames_end = NULL;
+    } else {
+        frames_start = oldest_frame->next;
+    }
+    esp_wifi_internal_free_rx_buffer(oldest_frame->l2_frame);
+    free(oldest_frame);
+
+    n_frames--;
+    
+    if (frames_start == NULL) {
+        xEventGroupClearBits(wifi_event_group, ESP_FRAME_RECEIVED_BIT);
+    }
+}
+
 /*
     Called by wifi code. Add an entry to the frames linked list. 
 */
@@ -57,6 +80,11 @@ esp_err_t packet_handler(void *buffer, uint16_t len, void *eb) {
         frames_start = entry;
     }
     frames_end = entry;
+    n_frames++;
+    if (n_frames > 30) {
+        printf("[wifi] Too many frames pending, dropping the oldest one.\n");
+        free_oldest_frame();
+    }
     xEventGroupSetBits(wifi_event_group, ESP_FRAME_RECEIVED_BIT);
     return ESP_OK;
 }
@@ -151,21 +179,9 @@ mirage_esp32_net_read(value v_buf, value v_size)
             result = ESP32_OK;
             read_size = current_frame->length;
             memcpy(buf, current_frame->buffer, current_frame->length);
-
-            /* Last frame in the list */
-            if (frames_start == frames_end) {
-                frames_start = NULL;
-                frames_end = NULL;
-            } else {
-                frames_start = current_frame->next;
-            }
-            esp_wifi_internal_free_rx_buffer(current_frame->l2_frame);
-            free(current_frame);
-
-            if (frames_start == NULL) {
-                xEventGroupClearBits(wifi_event_group, ESP_FRAME_RECEIVED_BIT);
-            }
         }
+
+        free_oldest_frame();
     } else {
         result = ESP32_AGAIN;
         read_size = 0;

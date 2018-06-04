@@ -9,6 +9,7 @@ depends: [
   "ocamlbuild" {build}
   "topkg" {build & >= "0.7.6"}
   "ocb-stubblr" {build}
+  "ocaml-esp32"
   "lwt-esp32" {>= "2.4.3"}
   "psq-esp32"
   "esp32-idf-headers"

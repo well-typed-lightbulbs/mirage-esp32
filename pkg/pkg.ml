@@ -12,10 +12,10 @@ let opams = [
 let nowhere ?force ?built ?cond ?exts ?dst _ = Pkg.nothing
 
 let () =
-  Pkg.describe ~build:(Pkg.build ~cmd()) ~opams "mirage-esp32" @@ fun c ->
+  Pkg.describe ~build:(Pkg.build ~cmd()) ~opams "mirage-impl-esp32" @@ fun c ->
   Ok [
     Pkg.mllib ~cmxa:true ~cmxs:false "lib/oS.mllib" ;
-    Pkg.clib ~dllfield:nowhere "lib/libmirage-esp32_bindings.clib";
+    Pkg.clib ~dllfield:nowhere "lib/libmirage-impl-esp32_bindings.clib";
     (* Should be lib/pkgconfig/ but workaround ocaml/opam#2153 *)
-    Pkg.share_root ~dst:"pkgconfig/" "lib/bindings/mirage-esp32.pc"
+    Pkg.share_root ~dst:"pkgconfig/" "lib/bindings/mirage-impl-esp32.pc"
   ]

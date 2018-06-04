@@ -12,7 +12,7 @@ let opams = [
 let nowhere ?force ?built ?cond ?exts ?dst _ = Pkg.nothing
 
 let () =
-  Pkg.describe ~build:(Pkg.build ~cmd()) ~opams "mirage-impl-esp32" @@ fun c ->
+  Pkg.describe ~build:(Pkg.build ~cmd()) ~opams "mirage-impl" @@ fun c ->
   Ok [
     Pkg.mllib ~cmxa:true ~cmxs:false "lib/oS.mllib" ;
     Pkg.clib ~dllfield:nowhere "lib/libmirage-impl-esp32_bindings.clib";

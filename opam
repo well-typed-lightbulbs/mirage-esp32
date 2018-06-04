@@ -13,6 +13,6 @@ depends: [
   "psq-esp32"
   "esp32-idf-headers"
 ]
-install: [["opam-installer" "--prefix=%{prefix}%/esp32-sysroot" "mirage-esp32.install"]]
+install: [["opam-installer" "--prefix=%{prefix}%/esp32-sysroot" "mirage-impl-esp32.install"]]
 conflicts: [ "io-page" {< "2.0.0"} ]
 available: [ ocaml-version >= "4.04.2" ]

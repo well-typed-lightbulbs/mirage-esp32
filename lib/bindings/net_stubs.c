@@ -34,7 +34,7 @@ typedef struct frame_list {
 
 
 /* Event group to notify Mirage task when data is received*/
-EventGroupHandle_t wifi_event_group;
+EventGroupHandle_t esp_event_group;
 const int ESP_FRAME_RECEIVED_BIT = BIT0;
 const int ESP_WIFI_CONNECTED_BIT = BIT1;
 
@@ -61,7 +61,7 @@ void free_oldest_frame()
     n_frames--;
     
     if (frames_start == NULL) {
-        xEventGroupClearBits(wifi_event_group, ESP_FRAME_RECEIVED_BIT);
+        xEventGroupClearBits(esp_event_group, ESP_FRAME_RECEIVED_BIT);
     }
 }
 
@@ -85,7 +85,7 @@ esp_err_t packet_handler(void *buffer, uint16_t len, void *eb) {
         printf("[wifi] Too many frames pending, dropping the oldest one.\n");
         free_oldest_frame();
     }
-    xEventGroupSetBits(wifi_event_group, ESP_FRAME_RECEIVED_BIT);
+    xEventGroupSetBits(esp_event_group, ESP_FRAME_RECEIVED_BIT);
     return ESP_OK;
 }
 
@@ -108,11 +108,11 @@ esp_err_t event_handler(void *ctx, system_event_t *event)
             break;
         case SYSTEM_EVENT_STA_CONNECTED:
             ESP_ERROR_CHECK(esp_wifi_internal_reg_rxcb(WIFI_IF_STA, packet_handler));
-            xEventGroupSetBits(wifi_event_group, ESP_WIFI_CONNECTED_BIT);
+            xEventGroupSetBits(esp_event_group, ESP_WIFI_CONNECTED_BIT);
             break;
         case SYSTEM_EVENT_STA_DISCONNECTED:
             ESP_ERROR_CHECK(esp_wifi_connect());
-            xEventGroupClearBits(wifi_event_group, ESP_WIFI_CONNECTED_BIT);
+            xEventGroupClearBits(esp_event_group, ESP_WIFI_CONNECTED_BIT);
             break;
         default:
             break;
@@ -131,7 +131,6 @@ void wifi_initialize()
     ESP_ERROR_CHECK( esp_wifi_set_mode(WIFI_MODE_STA) );
     ESP_ERROR_CHECK( esp_wifi_start() );
 
-    wifi_event_group = xEventGroupCreate();
 }
 
 /*
@@ -207,7 +206,7 @@ mirage_esp32_net_write(value v_buf, value v_size)
     size_t size = Long_val(v_size);
     esp32_result_t result;
 
-    xEventGroupWaitBits(wifi_event_group, ESP_WIFI_CONNECTED_BIT, false, true, 300*configTICK_RATE_HZ);
+    xEventGroupWaitBits(esp_event_group, ESP_WIFI_CONNECTED_BIT, false, true, 300*configTICK_RATE_HZ);
 
     switch(esp_wifi_internal_tx(WIFI_IF_STA, buf, size)){
         case ERR_OK:

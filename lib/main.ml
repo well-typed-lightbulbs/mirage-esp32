@@ -1,7 +1,9 @@
 open Lwt
 
 external poll : [`Time] Time.Monotonic.t -> bool = "caml_poll"
- 
+external initialize : unit -> unit = "caml_poll_initialize"
+
+
 (* Hacky *)
 [@@@ocaml.warning "-3"]
 module Lwt_sequence = Lwt_sequence
@@ -39,6 +41,7 @@ let err exn =
 
 (* Execute one iteration and register a callback function *)
 let run t =
+  initialize ();
   Printf.printf "Starting event loop.\n";
   flush stdout;
   let t = call_hooks enter_hooks <&> t in

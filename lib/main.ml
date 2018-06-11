@@ -51,7 +51,7 @@ let run t =
             Event.run ();
             (* Call leave hooks. *)
             Lwt_sequence.iter_l (fun f -> f ()) exit_iter_hooks;
-            aux ();
+            aux () 
           end
         else
           begin
@@ -61,9 +61,9 @@ let run t =
               |Some tm -> tm
             in 
               Event.wait_for_event timeout;
-              aux ();
-          end;
-        
+              aux ()
+          end
+  in
   aux ();
   Printf.printf "Leaving event loop.\n";
   flush stdout

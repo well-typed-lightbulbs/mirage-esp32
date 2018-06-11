@@ -16,7 +16,7 @@
 #include <sys/unistd.h>
 #include <esp_timer.h>
 
-static EventGroupHandle_t mirage_event_group;
+EventGroupHandle_t mirage_event_group;
 
 CAMLprim value
 caml_poll(value v_deadline, value v_events)

@@ -60,7 +60,7 @@ let run t =
               |None -> Time.Monotonic.(time () + of_nanoseconds 86_400_000_000_000L) (* one day = 24 * 60 * 60 s *)
               |Some tm -> tm
             in 
-              Event.wait_for_event timeout;
+              Event.poll timeout;
               aux ()
           end
   in

@@ -106,6 +106,6 @@ val work_is_available : unit -> bool
 
 val run : unit -> unit
 
-val wait_for_event : [`Time] Time.Monotonic.t -> unit
+val poll : [`Time] Time.Monotonic.t -> unit
 
 end

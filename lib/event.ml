@@ -1,5 +1,5 @@
 
-external poll : [`Time] Time.Monotonic.t -> int -> int = "caml_poll"
+external c_poll : [`Time] Time.Monotonic.t -> int -> int = "caml_poll"
 
 let event_list = ref 0
 
@@ -24,7 +24,7 @@ let wait_for_event number =
     event_list := !event_list lor (1 lsl number);
     Lwt_condition.wait (EventMap.find number !event_conditions)
 
-let work_is_available () = poll (Time.Monotonic.time ()) !event_list != 0
+let work_is_available () = c_poll (Time.Monotonic.time ()) !event_list != 0
 
 let run () = 
     let rec check evt = function 
@@ -35,8 +35,8 @@ let run () =
     in
     let event_list_copy = !event_list in 
     event_list := 0;
-    let events = poll (Time.Monotonic.time ()) event_list_copy in 
+    let events = c_poll (Time.Monotonic.time ()) event_list_copy in 
     check events 0
 
-let wait_for_event timeout = 
-    ignore (poll timeout !event_list)
+let poll timeout = 
+    ignore (c_poll timeout !event_list)

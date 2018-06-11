@@ -96,3 +96,17 @@ val with_timeout : int64 -> (unit -> 'a Lwt.t) -> 'a Lwt.t
     ]}
 *)
 end
+
+module Event : sig 
+
+val register_event_number : int -> unit 
+
+val wait_for_event : int -> unit Lwt.t
+
+val work_is_available : unit -> bool
+
+val run : unit -> unit
+
+val wait_for_event : [`Time] Time.Monotonic.t -> unit
+
+end

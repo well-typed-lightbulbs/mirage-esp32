@@ -16,30 +16,33 @@
 #include <sys/unistd.h>
 #include <esp_timer.h>
 
-extern EventGroupHandle_t esp_event_group;
-extern const int ESP_FRAME_RECEIVED_BIT;
+static EventGroupHandle_t mirage_event_group;
 
 CAMLprim value
-caml_poll(value v_deadline)
+caml_poll(value v_deadline, value v_events)
 {
-    CAMLparam1(v_deadline);
+    CAMLparam2(v_deadline, v_events);
 
     int64_t deadline = Int64_val(v_deadline);
+    int     events   = Int_val(v_events);
     int64_t cur_time = esp_timer_get_time();
 
-
     if (deadline <= cur_time) {
-        CAMLreturn(Val_bool(xEventGroupGetBits(esp_event_group) & ESP_FRAME_RECEIVED_BIT));
+        CAMLreturn(Val_int(xEventGroupGetBits(mirage_event_group) & events));
     } 
-    xEventGroupWaitBits(esp_event_group, ESP_FRAME_RECEIVED_BIT, false, true, (deadline - cur_time)*configTICK_RATE_HZ/(1000*1000*1000));
+    xEventGroupWaitBits(mirage_event_group, events, false, false, (deadline - cur_time)*configTICK_RATE_HZ/(1000*1000*1000));
 
-    CAMLreturn(Val_bool(xEventGroupGetBits(esp_event_group) & ESP_FRAME_RECEIVED_BIT));
+    CAMLreturn(Val_int(xEventGroupGetBits(mirage_event_group) & events));
+
 }
 
 CAMLprim value
 caml_poll_initialize(value unit) {
     CAMLparam0();
-    esp_event_group = xEventGroupCreate();
+    mirage_event_group = xEventGroupCreate();
 
     CAMLreturn(Val_unit);
 }
+
+
+   

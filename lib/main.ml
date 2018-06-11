@@ -1,8 +1,6 @@
 open Lwt
 
-external poll : [`Time] Time.Monotonic.t -> bool = "caml_poll"
 external initialize : unit -> unit = "caml_poll_initialize"
-
 
 (* Hacky *)
 [@@@ocaml.warning "-3"]
@@ -27,13 +25,6 @@ let rec call_hooks hooks  =
             return ()) in
         call_hooks hooks
 
-(* Solo5 currently has an all-or-nothing interface to block and wait for I/O
- * events, so we use a single condition variable to block threads which are
- * waiting for work and wake them all up if I/O is possible.  This will need to
- * be extended once solo5_poll() gains support for selecting events of
- * interest. *)
-let work = Lwt_condition.create ()
-let wait_for_work () = Lwt_condition.wait work
 
 let err exn =
   Printf.eprintf "main: %s\n%s" (Printexc.to_string exn) (Printexc.get_backtrace ()) ;
@@ -52,22 +43,27 @@ let run t =
     | Some () ->
         ()
     | None ->
-        let timeout =
-          match Time.select_next () with
-          |None -> Time.Monotonic.(time () + of_nanoseconds 86_400_000_000_000L) (* one day = 24 * 60 * 60 s *)
-          |Some tm -> tm
-        in
-        if poll timeout then begin
-          (* Call enter hooks. *)
-          Lwt_sequence.iter_l (fun f -> f ()) enter_iter_hooks;
-          (* Some I/O is possible, wake up threads and continue. *)
-          Lwt_condition.broadcast work ();
-          (* Call leave hooks. *)
-          Lwt_sequence.iter_l (fun f -> f ()) exit_iter_hooks;
-          aux ()
-        end else begin
-          aux ()
-        end in
+        if Event.work_is_available () then 
+          begin
+            (* Call enter hooks. *)
+            Lwt_sequence.iter_l (fun f -> f ()) enter_iter_hooks;
+            (* Some I/O is possible, wake up threads and continue. *)
+            Event.run ();
+            (* Call leave hooks. *)
+            Lwt_sequence.iter_l (fun f -> f ()) exit_iter_hooks;
+            aux ();
+          end
+        else
+          begin
+            let timeout =
+              match Time.select_next () with
+              |None -> Time.Monotonic.(time () + of_nanoseconds 86_400_000_000_000L) (* one day = 24 * 60 * 60 s *)
+              |Some tm -> tm
+            in 
+              Event.wait_for_event timeout;
+              aux ();
+          end;
+        
   aux ();
   Printf.printf "Leaving event loop.\n";
   flush stdout

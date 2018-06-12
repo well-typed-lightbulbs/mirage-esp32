@@ -1,4 +1,0 @@
-bindings/clock_stubs.o
-bindings/mm_stubs.o
-bindings/caml_poll.o
-bindings/alloc_pages_stubs.o

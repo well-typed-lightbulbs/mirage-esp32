@@ -1,7 +1,0 @@
-description = "MirageOS platform support for ESP32"
-version = "%%VERSION_NUM%%"
-requires = "lwt psq"
-archive(byte) = "oS.cma"
-archive(native) = "oS.cmxa"
-plugin(byte) = "oS.cma"
-exists_if = "oS.cma"

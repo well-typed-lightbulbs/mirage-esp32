@@ -1,0 +1,8 @@
+(jbuild_version 1)
+
+(library
+ ((name         OS)
+  (public_name  mirage-impl)
+  (c_names      (alloc_pages_stubs caml_poll clock_stubs mm_stubs))
+  (no_dynlink)
+  (libraries (lwt psq))))

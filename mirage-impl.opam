@@ -1,0 +1,14 @@
+opam-version: "1.2"
+maintainer:   "lucas.pluvinage@ens.fr"
+license:      "ISC"
+authors: []
+tags: []
+build: [ "jbuilder" "build" "-x" "esp32" "-p" "mirage-impl"]
+depends: [
+  "jbuilder" {build}
+  "ocaml-esp32"
+  "lwt-esp32" {>= "2.4.3"}
+  "psq-esp32"
+  "esp32-idf-headers"
+]
+available: [ ocaml-version >= "4.04.2" ]

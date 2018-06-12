@@ -32,7 +32,6 @@ let err exn =
 
 (* Execute one iteration and register a callback function *)
 let run t =
-  initialize ();
   Printf.printf "Starting event loop.\n";
   flush stdout;
   let t = call_hooks enter_hooks <&> t in
@@ -73,3 +72,5 @@ let at_exit f = ignore (Lwt_sequence.add_l f exit_hooks)
 let at_enter f = ignore (Lwt_sequence.add_l f enter_hooks)
 let at_exit_iter f = ignore (Lwt_sequence.add_l f exit_iter_hooks)
 let at_enter_iter f = ignore (Lwt_sequence.add_l f enter_iter_hooks)
+
+let () = initialize ()

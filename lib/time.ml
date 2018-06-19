@@ -5,10 +5,10 @@ type +'a io = 'a Lwt.t
 module Monotonic = struct
   type time_kind = [`Time | `Interval]
   type 'a t = int64 constraint 'a = [< time_kind]
-
+  (* Time in microseconds. *)
   external time : unit -> int64 = "caml_get_monotonic_time"
 
-  let of_nanoseconds x  = Int64.div x 1000L
+  let of_nanoseconds x = Int64.div x 1000L
 
   let ( + ) = ( Int64.add )
   let ( - ) = ( Int64.sub )

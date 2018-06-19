@@ -35,15 +35,14 @@ let run () =
         | n when n < 31 -> 
             if evt land (1 lsl n) != 0 then 
                 begin
+                    event_list := !event_list lxor (1 lsl n);
                     Lwt_condition.broadcast (EventMap.find n !event_conditions) ();
                     Logs.info (fun f -> f "poll triggered: %d" n);
                 end;
             check evt (n+1)
         | _ -> ()
     in
-    let event_list_copy = !event_list in 
-    event_list := 0;
-    let events = c_poll (Time.Monotonic.time ()) event_list_copy in 
+    let events = c_poll (Time.Monotonic.time ()) !event_list in 
     check events 0
 
 let poll timeout = 

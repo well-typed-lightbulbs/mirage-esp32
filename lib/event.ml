@@ -20,7 +20,7 @@ let register_event_number num =
 
 
 let wait_for_event number = 
-    assert (number > 0 && number < 31);
+    assert (number >= 0 && number < 31);
     event_list := !event_list lor (1 lsl number);
     Lwt_condition.wait (EventMap.find number !event_conditions)
 

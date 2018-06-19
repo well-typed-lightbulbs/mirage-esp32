@@ -22,10 +22,8 @@ let register_event_number num =
 
 let wait_for_event number = 
     assert (number >= 0 && number < 31);
-    Logs.info (fun f -> f "wait_for_event: %d %x" number !event_list);
     event_list := !event_list lor (1 lsl number);
     Lwt_condition.wait (EventMap.find number !event_conditions) >>= fun _ ->
-    Logs.info (fun f -> f "wait_for_event triggered: %d" number);
     Lwt.return_unit
 
 let work_is_available () = c_poll (Time.Monotonic.time ()) !event_list != 0
@@ -37,7 +35,6 @@ let run () =
                 begin
                     event_list := !event_list lxor (1 lsl n);
                     Lwt_condition.broadcast (EventMap.find n !event_conditions) ();
-                    Logs.info (fun f -> f "poll triggered: %d" n);
                 end;
             check evt (n+1)
         | _ -> ()

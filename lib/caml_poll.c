@@ -30,8 +30,13 @@ caml_poll(value v_deadline, value v_events)
     if (deadline <= cur_time) {
         CAMLreturn(Val_int(xEventGroupGetBits(mirage_event_group) & events));
     } 
-    xEventGroupWaitBits(mirage_event_group, events, false, false, (deadline - cur_time)*configTICK_RATE_HZ/(1000*1000));
 
+    if (events == 0) {
+        vTaskDelay((deadline - cur_time)*configTICK_RATE_HZ/(1000*1000));
+    } else {
+        xEventGroupWaitBits(mirage_event_group, events, false, false, (deadline - cur_time)*configTICK_RATE_HZ/(1000*1000));
+    }
+    
     CAMLreturn(Val_int(xEventGroupGetBits(mirage_event_group) & events));
 
 }

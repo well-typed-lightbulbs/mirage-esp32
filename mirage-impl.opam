@@ -9,6 +9,7 @@ depends: [
   "ocaml-esp32"
   "lwt-esp32" {>= "2.4.3"}
   "psq-esp32"
+  "logs-esp32"
   "esp32-idf-headers"
 ]
 available: [ ocaml-version >= "4.04.2" ]

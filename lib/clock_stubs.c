@@ -7,7 +7,9 @@
 #include <sys/types.h>
 #include <sys/time.h>
 
-// Returns time since boot in microseconds.
+/* 
+  Returns time since boot in microseconds.
+*/
 CAMLprim value
 caml_get_monotonic_time(value v_unit)
 {
@@ -15,6 +17,9 @@ caml_get_monotonic_time(value v_unit)
     CAMLreturn(caml_copy_int64(esp_timer_get_time()));
 }
 
+/* 
+  Use gettimeofday custom implementation.
+*/
 CAMLprim value unix_gettimeofday(value unit)
 {
   struct timeval tp;

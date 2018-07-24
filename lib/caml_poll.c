@@ -18,6 +18,9 @@
 
 EventGroupHandle_t mirage_event_group;
 
+/*
+    Use the polling feature of FreeRTOS to wait for a partical set of events given in argument.
+*/
 CAMLprim value
 caml_poll(value v_deadline, value v_events)
 {
@@ -41,13 +44,14 @@ caml_poll(value v_deadline, value v_events)
 
 }
 
+/*
+    Polling mechanism rely on the creation of an event group.
+    (https://www.freertos.org/FreeRTOS-Event-Groups.html)
+*/
 CAMLprim value
 caml_poll_initialize(value unit) {
     CAMLparam0();
     mirage_event_group = xEventGroupCreate();
-
     CAMLreturn(Val_unit);
 }
 
-
-   

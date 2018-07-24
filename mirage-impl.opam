@@ -1,6 +1,7 @@
 opam-version: "1.2"
 maintainer:   "lucas.pluvinage@ens.fr"
 license:      "ISC"
+version:      "0.1"
 authors: []
 tags: []
 build: [ "jbuilder" "build" "-x" "esp32" "-p" "mirage-impl"]

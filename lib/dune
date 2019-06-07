@@ -1,0 +1,6 @@
+(library
+ (name OS)
+ (public_name mirage-esp32)
+ (c_names alloc_pages_stubs caml_poll clock_stubs mm_stubs)
+ (no_dynlink)
+ (libraries lwt psq logs))

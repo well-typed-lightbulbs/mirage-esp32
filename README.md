@@ -1,4 +1,4 @@
-# mirage-impl-esp32 -- ESP32 core platform libraries for MirageOS
+# mirage-esp32 -- ESP32 core platform libraries for MirageOS
 
 This package provides the MirageOS `OS` library for
 esp32 targets, which handles the main loop and timers. It also provides

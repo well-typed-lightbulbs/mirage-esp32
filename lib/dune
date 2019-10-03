@@ -1,6 +1,14 @@
 (library
- (name OS)
- (public_name mirage-esp32)
+ (name os_esp32)
+ (public_name mirage-esp32.internals)
+ (modules :standard \ OS)
  (c_names alloc_pages_stubs caml_poll clock_stubs mm_stubs)
  (no_dynlink)
  (libraries lwt psq logs))
+
+(library 
+  (name OS)
+  (public_name mirage-esp32)
+  (implements mirage-os-shim)
+  (libraries mirage-esp32.internals)
+  (modules OS))
